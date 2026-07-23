@@ -4,326 +4,145 @@ const API_URL =
 let currentPassword = "";
 let passwordVisible = false;
 
+async function cariDelima() {
 
-async function cariDelima(){
+  const nokp =
+    document.getElementById("nokp")
+      .value
+      .replace(/\D/g, "");
 
-const nokp =
-document.getElementById("nokp").value
-.replace(/\D/g,"");
+  const pin =
+    document.getElementById("pin")
+      .value
+      .replace(/\D/g, "");
 
-const result =
-document.getElementById("result");
+  const result =
+    document.getElementById("result");
 
-const loading =
-document.getElementById("loading");
+  const loading =
+    document.getElementById("loading");
 
-const message =
-document.getElementById("message");
+  const message =
+    document.getElementById("message");
 
 
-result.classList.add("hidden");
-message.innerHTML = "";
+  result.classList.add("hidden");
+  message.innerHTML = "";
 
 
-if(nokp.length !== 12){
+  // ============================
+  // VALIDATE MYKID
+  // ============================
 
-message.innerHTML =
-'<div class="error">Sila masukkan 12 digit No. KP / MyKid.</div>';
+  if (nokp.length !== 12) {
 
-return;
+    message.innerHTML =
+      '<div class="error">' +
+      'Sila masukkan 12 digit No. KP / MyKid.' +
+      '</div>';
 
-}
-
-
-loading.classList.remove("hidden");
-
-
-try{
-
-const response =
-await fetch(
-API_URL +
-"?action=search&nokp=" +
-encodeURIComponent(nokp)
-);
-
-if(!response.ok){
-throw new Error("Server error");
-}
-
-const data =
-await response.json();
-
-
-loading.classList.add("hidden");
-
-
-if(!data.success){
-
-message.innerHTML =
-'<div class="error">Rekod murid tidak dijumpai.</div>';
-
-return;
-
-}
-
-
-document.getElementById("nama").textContent =
-data.nama || "-";
-
-document.getElementById("kelas").textContent =
-data.kelas || "-";
-
-document.getElementById("delima").textContent =
-data.delima || "-";
-
-
-currentPassword =
-data.password || "";
-
-
-document.getElementById("password").textContent =
-"••••••••";
-
-
-passwordVisible = false;
-
-
-result.classList.remove("hidden");
-
-
-}catch(error){
-
-loading.classList.add("hidden");
-
-message.innerHTML =
-'<div class="error">Tidak dapat menghubungi sistem. Sila cuba lagi.</div>';
-
-console.error(error);
-
-}
-
-}
-
-
-function togglePassword(){
-
-const password =
-document.getElementById("password");
-
-
-passwordVisible =
-!passwordVisible;
-
-
-if(passwordVisible){
-
-password.textContent =
-currentPassword || "-";
-
-}else{
-
-password.textContent =
-"••••••••";
-
-}
-
-}
-
-
-async function copyText(id){
-
-const text =
-document.getElementById(id).textContent;
-
-try{
-
-await navigator.clipboard.writeText(text);
-
-alert("ID DELIMa telah disalin.");
-
-}catch{
-
-alert("Tidak dapat menyalin.");
-
-}
-
-}
-
-
-async function copyPassword(){
-
-if(!currentPassword){
-return;
-}
-
-try{
-
-await navigator.clipboard.writeText(
-currentPassword
-);
-
-alert("Kata laluan telah disalin.");
-
-}catch{
-
-alert("Tidak dapat menyalin.");
-
-}
-
-}
-
-
-function showTutorial(){
-
-document
-.getElementById("tutorial")
-.classList.toggle("hidden");
-
-document
-.getElementById("help")
-.classList.add("hidden");
-
-}
-
-
-function showHelp(){
-
-document
-.getElementById("help")
-.classList.toggle("hidden");
-
-document
-.getElementById("tutorial")
-.classList.add("hidden");
-
-}
-
-
-document
-.getElementById("nokp")
-.addEventListener(
-"keydown",
-function(event){
-
-if(event.key === "Enter"){
-cariDelima();
-}
-let deferredPrompt = null;
-
-const installCard =
-  document.getElementById("installCard");
-
-const installBtn =
-  document.getElementById("installBtn");
-
-
-// ===============================
-// ANDROID / CHROME INSTALL
-// ===============================
-
-window.addEventListener(
-  "beforeinstallprompt",
-  (event) => {
-
-    event.preventDefault();
-
-    deferredPrompt = event;
-
-    installCard.classList.remove("hidden");
-
+    return;
   }
-);
 
 
-installBtn.addEventListener(
-  "click",
-  async () => {
+  // ============================
+  // VALIDATE PIN
+  // ============================
 
-    if (!deferredPrompt) {
+  if (pin.length !== 4) {
+
+    message.innerHTML =
+      '<div class="error">' +
+      'Sila masukkan 4 digit PIN penjaga.' +
+      '</div>';
+
+    return;
+  }
+
+
+  loading.classList.remove("hidden");
+
+
+  try {
+
+    const url =
+      API_URL +
+      "?action=search" +
+      "&nokp=" +
+      encodeURIComponent(nokp) +
+      "&pin=" +
+      encodeURIComponent(pin);
+
+
+    const response =
+      await fetch(url);
+
+
+    if (!response.ok) {
+      throw new Error("Server error");
+    }
+
+
+    const data =
+      await response.json();
+
+
+    loading.classList.add("hidden");
+
+
+    if (!data.success) {
+
+      message.innerHTML =
+        '<div class="error">' +
+        'Maklumat tidak sepadan atau akaun tidak dijumpai.' +
+        '</div>';
+
       return;
     }
 
-    deferredPrompt.prompt();
 
-    const result =
-      await deferredPrompt.userChoice;
+    document.getElementById("nama")
+      .textContent =
+      data.nama || "-";
 
-    console.log(
-      "Install:",
-      result.outcome
-    );
 
-    deferredPrompt = null;
+    document.getElementById("kelas")
+      .textContent =
+      data.kelas || "-";
 
-    installCard.classList.add("hidden");
 
+    document.getElementById("delima")
+      .textContent =
+      data.delima || "-";
+
+
+    currentPassword =
+      data.password || "";
+
+
+    document.getElementById("password")
+      .textContent =
+      "••••••••";
+
+
+    passwordVisible = false;
+
+
+    result.classList.remove("hidden");
+
+
+  } catch (error) {
+
+    loading.classList.add("hidden");
+
+    message.innerHTML =
+      '<div class="error">' +
+      'Tidak dapat menghubungi sistem. Sila cuba lagi.' +
+      '</div>';
+
+    console.error(error);
   }
-);
-
-
-// ===============================
-// APP INSTALLED
-// ===============================
-
-window.addEventListener(
-  "appinstalled",
-  () => {
-
-    deferredPrompt = null;
-
-    installCard.classList.add("hidden");
-
-    console.log(
-      "Portal DELIMa installed"
-    );
-
-  }
-);
-
-
-// ===============================
-// IPHONE / IPAD
-// ===============================
-
-function isIOS() {
-
-  return /iphone|ipad|ipod/i
-    .test(window.navigator.userAgent);
-
 }
 
 
-function isStandalone() {
-
-  return (
-    window.matchMedia(
-      "(display-mode: standalone)"
-    ).matches ||
-    window.navigator.standalone === true
-  );
-
-}
-
-
-if (isIOS() && !isStandalone()) {
-
-  installCard.classList.remove("hidden");
-
-  installBtn.textContent =
-    "Cara Install";
-
-
-  installBtn.onclick = function() {
-
-    alert(
-      "Untuk install Portal DELIMa di iPhone:\n\n" +
-      "1. Tekan butang Share di Safari.\n" +
-      "2. Pilih Add to Home Screen.\n" +
-      "3. Tekan Add."
-    );
-
-  };
-
-}
-});
+ 
