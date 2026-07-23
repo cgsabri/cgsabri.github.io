@@ -209,5 +209,121 @@ function(event){
 if(event.key === "Enter"){
 cariDelima();
 }
+let deferredPrompt = null;
 
+const installCard =
+  document.getElementById("installCard");
+
+const installBtn =
+  document.getElementById("installBtn");
+
+
+// ===============================
+// ANDROID / CHROME INSTALL
+// ===============================
+
+window.addEventListener(
+  "beforeinstallprompt",
+  (event) => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    installCard.classList.remove("hidden");
+
+  }
+);
+
+
+installBtn.addEventListener(
+  "click",
+  async () => {
+
+    if (!deferredPrompt) {
+      return;
+    }
+
+    deferredPrompt.prompt();
+
+    const result =
+      await deferredPrompt.userChoice;
+
+    console.log(
+      "Install:",
+      result.outcome
+    );
+
+    deferredPrompt = null;
+
+    installCard.classList.add("hidden");
+
+  }
+);
+
+
+// ===============================
+// APP INSTALLED
+// ===============================
+
+window.addEventListener(
+  "appinstalled",
+  () => {
+
+    deferredPrompt = null;
+
+    installCard.classList.add("hidden");
+
+    console.log(
+      "Portal DELIMa installed"
+    );
+
+  }
+);
+
+
+// ===============================
+// IPHONE / IPAD
+// ===============================
+
+function isIOS() {
+
+  return /iphone|ipad|ipod/i
+    .test(window.navigator.userAgent);
+
+}
+
+
+function isStandalone() {
+
+  return (
+    window.matchMedia(
+      "(display-mode: standalone)"
+    ).matches ||
+    window.navigator.standalone === true
+  );
+
+}
+
+
+if (isIOS() && !isStandalone()) {
+
+  installCard.classList.remove("hidden");
+
+  installBtn.textContent =
+    "Cara Install";
+
+
+  installBtn.onclick = function() {
+
+    alert(
+      "Untuk install Portal DELIMa di iPhone:\n\n" +
+      "1. Tekan butang Share di Safari.\n" +
+      "2. Pilih Add to Home Screen.\n" +
+      "3. Tekan Add."
+    );
+
+  };
+
+}
 });
