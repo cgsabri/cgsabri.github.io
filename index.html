@@ -4,27 +4,36 @@
   <meta charset="UTF-8">
 
   <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <meta name="theme-color" content="#123b72">
 
-  <title>Portal DELIMa | SK Agama (MIS) Miri</title>
+  <meta name="description"
+        content="Portal Pengurusan DELIMa SK Agama (MIS) Miri">
 
-  <link rel="stylesheet" href="style.css">
+  <title>Portal Pengurusan DELIMa</title>
+
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="icon"
+        href="assets/icon-192.png">
 </head>
 
 <body>
 
-<header class="header">
+<header class="topbar">
 
-  <img src="assets/logo.png"
-       alt="Logo SK Agama (MIS) Miri"
-       class="logo">
+  <div class="school-brand">
 
-  <div>
-    <h1>Portal DELIMa</h1>
-    <p>SK Agama (MIS) Miri</p>
+    <img src="assets/logo.png"
+         alt="Logo SK Agama (MIS) Miri">
+
+    <div>
+      <strong>Portal Pengurusan DELIMa</strong>
+      <span>SK Agama (MIS) Miri</span>
+    </div>
+
   </div>
 
 </header>
@@ -32,303 +41,466 @@
 
 <main>
 
-<section class="hero">
+  <!-- HERO -->
 
-  <span class="badge">PORTAL DIGITAL MURID</span>
+  <section class="hero">
 
-  <h2>
-    Akses DELIMa<br>
-    Lebih Mudah
-  </h2>
+    <div class="hero-badge">
+      PORTAL DIGITAL SEKOLAH
+    </div>
 
-  <p>
-    Semak akaun DELIMa murid dan dapatkan
-    panduan penggunaan perkhidmatan digital.
-  </p>
+    <h1>
+      Portal Pengurusan
+      <span>DELIMa</span>
+    </h1>
 
-</section>
-<section id="installCard" class="install-card hidden">
+    <p>
+      Semakan akaun DELIMa murid dengan mudah,
+      pantas dan selamat.
+    </p>
 
-  <div class="install-icon">
-    <img src="assets/icon-192.png" alt="Portal DELIMa">
-  </div>
-
-  <div class="install-info">
-    <strong>Portal Pengurusan DELIMa</strong>
-    <span>Pasang portal ini pada telefon anda</span>
-  </div>
-
-  <button id="installBtn">
-    Install
-  </button>
-
-</section>
-
-<section class="card">
-
-  <div class="icon">🔎</div>
-
-  <h3>Semakan ID DELIMa</h3>
-
-  <p class="description">
-  Masukkan No. KP / MyKid murid dan PIN penjaga
-  untuk membuat semakan akaun.
-  </p>
+  </section>
 
 
-  <label for="nokp">
-    No. KP / MyKid
-  </label>
+  <!-- INSTALL APP -->
 
-  <input
-      type="text"
-      id="nokp"
-      inputmode="numeric"
-      placeholder="Contoh: 150101131234"
-      maxlength="12">
-<label for="pin" style="margin-top:15px;">
-  PIN
-</label>
+  <section id="installCard"
+           class="install-card hidden">
 
-<input
-  type="password"
-  id="pin"
-  inputmode="numeric"
-  maxlength="4"
-  placeholder="Masukkan 4 digit PIN">
+    <img src="assets/icon-192.png"
+         alt="Portal DELIMa">
 
-  <button
+    <div class="install-info">
+      <strong>Install Portal DELIMa</strong>
+      <span>
+        Pasang portal pada telefon anda
+      </span>
+    </div>
+
+    <button id="installBtn">
+      Install
+    </button>
+
+  </section>
+
+
+  <!-- SEARCH CARD -->
+
+  <section class="search-card">
+
+    <div class="search-icon">
+      🔎
+    </div>
+
+    <h2>Semakan ID DELIMa</h2>
+
+    <p class="description">
+      Masukkan No. KP / MyKid murid dan
+      PIN penjaga untuk membuat semakan akaun.
+    </p>
+
+
+    <!-- IC -->
+
+    <div class="form-group">
+
+      <label for="nokp">
+        No. KP / MyKid
+      </label>
+
+      <input
+        type="text"
+        id="nokp"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="12"
+        placeholder="Contoh: 180912050037">
+
+    </div>
+
+
+    <!-- PIN -->
+
+    <div class="form-group">
+
+      <label for="pin">
+        PIN Penjaga
+      </label>
+
+      <div class="pin-input">
+
+        <input
+          type="password"
+          id="pin"
+          inputmode="numeric"
+          autocomplete="off"
+          maxlength="4"
+          placeholder="4 digit PIN">
+
+        <button
+          type="button"
+          id="showPinBtn"
+          onclick="togglePin()"
+          aria-label="Tunjuk PIN">
+          👁
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <button
       id="btnCari"
+      class="search-button"
       onclick="cariDelima()">
 
-      Semak Akaun
+      <span id="btnText">
+        Semak Akaun
+      </span>
 
-  </button>
-
-
-  <div id="loading" class="loading hidden">
-
-    <div class="spinner"></div>
-
-    <p>Mencari akaun...</p>
-
-  </div>
+    </button>
 
 
-  <div id="message"></div>
+    <!-- LOADING -->
 
+    <div id="loading"
+         class="loading hidden">
 
-  <div id="result" class="result hidden">
+      <div class="spinner"></div>
 
-    <div class="success">
-      ✓ AKAUN DIJUMPAI
-    </div>
-
-
-    <div class="field">
-
-      <span>Nama Murid</span>
-
-      <strong id="nama"></strong>
+      <p>
+        Sedang membuat semakan...
+      </p>
 
     </div>
 
 
-    <div class="field">
+    <!-- MESSAGE -->
 
-      <span>Kelas</span>
-
-      <strong id="kelas"></strong>
-
-    </div>
+    <div id="message"></div>
 
 
-    <div class="field">
+    <!-- RESULT -->
 
-      <span>ID DELIMa</span>
+    <div id="result"
+         class="result hidden">
 
-      <div class="copy-row">
+      <div class="success-header">
 
-        <strong id="delima"></strong>
+        <div class="success-check">
+          ✓
+        </div>
 
-        <button
-            class="copy"
-            onclick="copyText('delima')">
-
-            Salin
-
-        </button>
+        <div>
+          <strong>Akaun Dijumpai</strong>
+          <span>
+            Maklumat akaun DELIMa murid
+          </span>
+        </div>
 
       </div>
 
-    </div>
 
+      <!-- NAMA -->
 
-    <div class="field">
+      <div class="result-item">
 
-      <span>Kata Laluan</span>
+        <span>Nama Murid</span>
 
-      <div class="password-row">
-
-        <strong id="password">
-          ••••••••
+        <strong id="nama">
+          -
         </strong>
 
-        <button
-            class="small"
-            onclick="togglePassword()">
+      </div>
 
-            👁 Lihat
 
-        </button>
+      <!-- KELAS -->
 
-        <button
-            class="small"
-            onclick="copyPassword()">
+      <div class="result-item">
 
-            Salin
+        <span>Kelas</span>
 
-        </button>
+        <strong id="kelas">
+          -
+        </strong>
 
       </div>
 
+
+      <!-- EMAIL -->
+
+      <div class="result-item">
+
+        <span>ID / Emel DELIMa</span>
+
+        <div class="value-action">
+
+          <strong id="delima">
+            -
+          </strong>
+
+          <button
+            type="button"
+            onclick="copyDelima()">
+
+            Salin
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- PASSWORD -->
+
+      <div class="result-item">
+
+        <span>Kata Laluan</span>
+
+        <div class="value-action">
+
+          <strong id="password">
+            ••••••••
+          </strong>
+
+          <div class="password-buttons">
+
+            <button
+              type="button"
+              onclick="togglePassword()">
+
+              👁 Lihat
+
+            </button>
+
+            <button
+              type="button"
+              onclick="copyPassword()">
+
+              Salin
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- LOGIN -->
+
+      <a
+        class="delima-login"
+        href="https://delima.moe-dl.edu.my/"
+        target="_blank"
+        rel="noopener noreferrer">
+
+        Log Masuk DELIMa ↗
+
+      </a>
+
+
+      <button
+        type="button"
+        class="new-search"
+        onclick="resetSearch()">
+
+        Buat Semakan Baru
+
+      </button>
+
     </div>
 
-
-    <a
-      class="login-button"
-      href="https://delima.moe-dl.edu.my/"
-      target="_blank"
-      rel="noopener noreferrer">
-
-      Log Masuk DELIMa
-
-    </a>
-
-  </div>
-
-</section>
+  </section>
 
 
-<section class="quick">
+  <!-- MENU -->
 
-  <h3>Panduan & Bantuan</h3>
+  <section class="services">
+
+    <h2>Panduan & Bantuan</h2>
+
+    <div class="service-grid">
+
+      <button onclick="toggleSection('tutorial')">
+
+        <span class="service-icon">
+          📚
+        </span>
+
+        <strong>
+          Tutorial DELIMa
+        </strong>
+
+        <small>
+          Panduan penggunaan akaun
+        </small>
+
+      </button>
 
 
-  <div class="quick-grid">
+      <button onclick="toggleSection('help')">
 
-    <button onclick="showTutorial()">
+        <span class="service-icon">
+          🆘
+        </span>
+
+        <strong>
+          Bantuan ICT
+        </strong>
+
+        <small>
+          Dapatkan bantuan akaun
+        </small>
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- TUTORIAL -->
+
+  <section id="tutorial"
+           class="info-card hidden">
+
+    <div class="section-title">
 
       <span>📚</span>
 
-      <strong>Tutorial</strong>
+      <div>
+        <h2>Tutorial DELIMa</h2>
+        <p>Panduan asas penggunaan DELIMa</p>
+      </div>
 
-      <small>
-        Panduan menggunakan DELIMa
-      </small>
-
-    </button>
+    </div>
 
 
-    <button onclick="showHelp()">
+    <div class="tutorial-item">
+
+      <div class="number">
+        1
+      </div>
+
+      <div>
+        <strong>Semak Akaun</strong>
+        <p>
+          Masukkan No. KP / MyKid dan
+          PIN penjaga.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="tutorial-item">
+
+      <div class="number">
+        2
+      </div>
+
+      <div>
+        <strong>Salin ID DELIMa</strong>
+        <p>
+          Tekan butang Salin untuk
+          menyalin ID DELIMa.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="tutorial-item">
+
+      <div class="number">
+        3
+      </div>
+
+      <div>
+        <strong>Log Masuk</strong>
+        <p>
+          Tekan Log Masuk DELIMa dan
+          gunakan ID serta kata laluan.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- HELP -->
+
+  <section id="help"
+           class="info-card hidden">
+
+    <div class="section-title">
 
       <span>🆘</span>
 
-      <strong>Bantuan ICT</strong>
+      <div>
+        <h2>Bantuan ICT</h2>
 
-      <small>
-        Masalah akaun DELIMa
-      </small>
+        <p>
+          Masalah berkaitan akaun DELIMa
+        </p>
+      </div>
 
-    </button>
-
-
-  </div>
-
-</section>
+    </div>
 
 
-<section id="tutorial" class="info-section hidden">
+    <div class="help-box">
 
-<h3>📚 Tutorial DELIMa</h3>
+      <strong>
+        Akaun tidak dijumpai?
+      </strong>
 
-<div class="tutorial-item">
+      <p>
+        Pastikan No. KP / MyKid dan PIN
+        dimasukkan dengan betul.
+      </p>
 
-<h4>1. Log Masuk DELIMa</h4>
-
-<p>
-Gunakan ID DELIMa yang diberikan oleh pihak sekolah.
-</p>
-
-</div>
-
-
-<div class="tutorial-item">
-
-<h4>2. Google Classroom</h4>
-
-<p>
-Gunakan akaun DELIMa untuk mengakses kelas
-yang diberikan oleh guru.
-</p>
-
-</div>
+    </div>
 
 
-<div class="tutorial-item">
+    <div class="help-box">
 
-<h4>3. Google Drive</h4>
+      <strong>
+        Tidak boleh log masuk?
+      </strong>
 
-<p>
-Simpan tugasan dan dokumen menggunakan
-Google Drive akaun DELIMa.
-</p>
+      <p>
+        Sila hubungi Penyelaras ICT
+        SK Agama (MIS) Miri.
+      </p>
 
-</div>
+    </div>
 
-</section>
-
-
-<section id="help" class="info-section hidden">
-
-<h3>🆘 Bantuan ICT</h3>
-
-<p>
-Jika ID DELIMa tidak dijumpai atau terdapat
-masalah untuk log masuk, sila hubungi
-penyelaras ICT sekolah.
-</p>
-
-<div class="contact">
-
-<strong>
-Penyelaras ICT
-</strong>
-
-<p>
-SK Agama (MIS) Miri
-</p>
-
-</div>
-
-</section>
+  </section>
 
 </main>
 
 
 <footer>
 
-<p>
-Portal DELIMa
-</p>
+  <img src="assets/logo.png"
+       alt="Logo sekolah">
 
-<strong>
-SK Agama (MIS) Miri
-</strong>
+  <strong>
+    Portal Pengurusan DELIMa
+  </strong>
 
-<p class="copyright">
-© 2026
-</p>
+  <span>
+    SK Agama (MIS) Miri
+  </span>
+
+  <small>
+    © 2026 SK Agama (MIS) Miri
+  </small>
 
 </footer>
 
@@ -339,11 +511,16 @@ SK Agama (MIS) Miri
 
 if ("serviceWorker" in navigator) {
 
-window.addEventListener("load", function() {
+  window.addEventListener(
+    "load",
+    () => {
 
-navigator.serviceWorker.register("service-worker.js");
+      navigator.serviceWorker
+        .register("service-worker.js")
+        .catch(console.error);
 
-});
+    }
+  );
 
 }
 
