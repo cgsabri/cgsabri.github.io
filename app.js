@@ -679,3 +679,544 @@ function escapeHTML(text) {
   return div.innerHTML;
 
 }
+// =====================================
+// LOAD PUBLIC CONTENT
+// =====================================
+
+async function loadPublicContent() {
+
+  await Promise.all([
+    loadPublicTutorials(),
+    loadPublicHelp()
+  ]);
+
+}
+
+
+// =====================================
+// LOAD TUTORIAL
+// =====================================
+
+async function loadPublicTutorials() {
+
+  const container =
+    document.getElementById("tutorialContent");
+
+  if (!container) return;
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL +
+        "?action=getTutorial&t=" +
+        Date.now(),
+        {
+          cache: "no-store"
+        }
+      );
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.success ||
+      !Array.isArray(data.tutorials)
+    ) {
+
+      throw new Error(
+        "Tutorial API error"
+      );
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    if (data.tutorials.length === 0) {
+
+      container.innerHTML =
+        '<div class="help-box">' +
+        '<strong>Belum ada tutorial</strong>' +
+        '<p>Tutorial akan ditambah dari semasa ke semasa.</p>' +
+        '</div>';
+
+      return;
+
+    }
+
+
+    data.tutorials.forEach(
+      (tutorial, index) => {
+
+        const item =
+          document.createElement("div");
+
+        item.className =
+          "tutorial-item";
+
+
+        const number =
+          document.createElement("div");
+
+        number.className =
+          "number";
+
+        number.textContent =
+          tutorial.susunan ||
+          index + 1;
+
+
+        const content =
+          document.createElement("div");
+
+
+        const title =
+          document.createElement("strong");
+
+        title.textContent =
+          tutorial.tajuk || "Tutorial";
+
+
+        const description =
+          document.createElement("p");
+
+        description.textContent =
+          tutorial.penerangan || "";
+
+
+        content.appendChild(title);
+
+        if (tutorial.penerangan) {
+          content.appendChild(description);
+        }
+
+
+        // LINK
+
+        const safeLink =
+          safePublicUrl(
+            tutorial.link
+          );
+
+
+        if (safeLink) {
+
+          const link =
+            document.createElement("a");
+
+          link.href =
+            safeLink;
+
+          link.target =
+            "_blank";
+
+          link.rel =
+            "noopener noreferrer";
+
+          link.textContent =
+            "Buka Tutorial ↗";
+
+          link.style.display =
+            "inline-block";
+
+          link.style.marginTop =
+            "8px";
+
+          link.style.color =
+            "#123b72";
+
+          link.style.fontWeight =
+            "700";
+
+          link.style.textDecoration =
+            "none";
+
+
+          content.appendChild(link);
+
+        }
+
+
+        item.appendChild(number);
+
+        item.appendChild(content);
+
+        container.appendChild(item);
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Tutorial Error:",
+      error
+    );
+
+
+    container.innerHTML =
+      '<div class="help-box">' +
+      '<strong>Tutorial tidak dapat dimuatkan.</strong>' +
+      '<p>Sila cuba semula kemudian.</p>' +
+      '</div>';
+
+  }
+
+}
+
+
+// =====================================
+// LOAD HELP
+// =====================================
+
+async function loadPublicHelp() {
+
+  const container =
+    document.getElementById(
+      "helpContent"
+    );
+
+
+  if (!container) return;
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL +
+        "?action=getHelp&t=" +
+        Date.now(),
+        {
+          cache: "no-store"
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!data.success) {
+
+      throw new Error(
+        "Help API error"
+      );
+
+    }
+
+
+    const help =
+      data.help || {};
+
+
+    // TITLE
+
+    const title =
+      document.getElementById(
+        "publicHelpTitle"
+      );
+
+
+    if (title && help.tajuk) {
+
+      title.textContent =
+        help.tajuk;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    // DESCRIPTION
+
+    if (help.penerangan) {
+
+      const box =
+        createHelpBox(
+          "Maklumat Bantuan",
+          help.penerangan
+        );
+
+      container.appendChild(box);
+
+    }
+
+
+    // OFFICER
+
+    if (help.pegawai) {
+
+      const box =
+        createHelpBox(
+          "Pegawai / Penyelaras",
+          help.pegawai
+        );
+
+      container.appendChild(box);
+
+    }
+
+
+    // TIME
+
+    if (help.waktu) {
+
+      const box =
+        createHelpBox(
+          "Waktu Bantuan",
+          help.waktu
+        );
+
+      container.appendChild(box);
+
+    }
+
+
+    // CONTACT BUTTONS
+
+    const contact =
+      document.createElement("div");
+
+    contact.style.display =
+      "grid";
+
+    contact.style.gap =
+      "10px";
+
+    contact.style.marginTop =
+      "15px";
+
+
+    // WHATSAPP
+
+    if (help.whatsapp) {
+
+      const number =
+        String(help.whatsapp)
+          .replace(/\D/g, "");
+
+
+      const whatsapp =
+        document.createElement("a");
+
+
+      whatsapp.href =
+        "https://wa.me/" +
+        number;
+
+
+      whatsapp.target =
+        "_blank";
+
+      whatsapp.rel =
+        "noopener noreferrer";
+
+
+      whatsapp.textContent =
+        "💬 Hubungi melalui WhatsApp";
+
+
+      styleContactButton(
+        whatsapp,
+        "#159455"
+      );
+
+
+      contact.appendChild(
+        whatsapp
+      );
+
+    }
+
+
+    // EMAIL
+
+    if (help.email) {
+
+      const email =
+        document.createElement("a");
+
+
+      email.href =
+        "mailto:" +
+        encodeURIComponent(
+          help.email
+        );
+
+
+      email.textContent =
+        "✉️ Hantar E-mel";
+
+
+      styleContactButton(
+        email,
+        "#123b72"
+      );
+
+
+      contact.appendChild(
+        email
+      );
+
+    }
+
+
+    container.appendChild(
+      contact
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "Help Error:",
+      error
+    );
+
+
+    container.innerHTML =
+      '<div class="help-box">' +
+      '<strong>Maklumat bantuan tidak dapat dimuatkan.</strong>' +
+      '<p>Sila cuba semula kemudian.</p>' +
+      '</div>';
+
+  }
+
+}
+
+
+// =====================================
+// CREATE HELP BOX
+// =====================================
+
+function createHelpBox(
+  title,
+  text
+) {
+
+  const box =
+    document.createElement("div");
+
+
+  box.className =
+    "help-box";
+
+
+  const heading =
+    document.createElement("strong");
+
+
+  heading.textContent =
+    title;
+
+
+  const paragraph =
+    document.createElement("p");
+
+
+  paragraph.textContent =
+    text;
+
+
+  box.appendChild(
+    heading
+  );
+
+
+  box.appendChild(
+    paragraph
+  );
+
+
+  return box;
+
+}
+
+
+// =====================================
+// CONTACT BUTTON
+// =====================================
+
+function styleContactButton(
+  element,
+  background
+) {
+
+  element.style.display =
+    "block";
+
+  element.style.padding =
+    "13px";
+
+  element.style.borderRadius =
+    "10px";
+
+  element.style.background =
+    background;
+
+  element.style.color =
+    "#ffffff";
+
+  element.style.textAlign =
+    "center";
+
+  element.style.textDecoration =
+    "none";
+
+  element.style.fontWeight =
+    "700";
+
+}
+
+
+// =====================================
+// SAFE PUBLIC URL
+// =====================================
+
+function safePublicUrl(value) {
+
+  if (!value) return "";
+
+
+  try {
+
+    const url =
+      new URL(value);
+
+
+    if (
+      url.protocol !== "https:" &&
+      url.protocol !== "http:"
+    ) {
+
+      return "";
+
+    }
+
+
+    return url.href;
+
+
+  } catch {
+
+    return "";
+
+  }
+
+}
+
+
+// =====================================
+// START PUBLIC CONTENT
+// =====================================
+
+window.addEventListener(
+  "DOMContentLoaded",
+  loadPublicContent
+);
