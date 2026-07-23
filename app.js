@@ -1,5 +1,5 @@
 const API_URL =
-"https://script.google.com/macros/s/PASTE_DEPLOYMENT_ID_HERE/exec";
+"https://script.google.com/macros/s/AKfycbxE5cLmLhvnOwVnMH14ApD3bGMH3So1NYhwyWqU5OF9uLg7KEbyDZyhpcmny0h-rqXP/exec";
 
 let currentPassword = "";
 let passwordVisible = false;
