@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#123b72">
+
+  <title>Portal DELIMa | SK Agama (MIS) Miri</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+<header class="header">
+
+  <img src="assets/logo.png"
+       alt="Logo SK Agama (MIS) Miri"
+       class="logo">
+
+  <div>
+    <h1>Portal DELIMa</h1>
+    <p>SK Agama (MIS) Miri</p>
+  </div>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+  <span class="badge">PORTAL DIGITAL MURID</span>
+
+  <h2>
+    Akses DELIMa<br>
+    Lebih Mudah
+  </h2>
+
+  <p>
+    Semak akaun DELIMa murid dan dapatkan
+    panduan penggunaan perkhidmatan digital.
+  </p>
+
+</section>
+
+
+<section class="card">
+
+  <div class="icon">🔎</div>
+
+  <h3>Semakan ID DELIMa</h3>
+
+  <p class="description">
+    Masukkan nombor MyKid / Kad Pengenalan murid.
+  </p>
+
+
+  <label for="nokp">
+    No. KP / MyKid
+  </label>
+
+  <input
+      type="text"
+      id="nokp"
+      inputmode="numeric"
+      placeholder="Contoh: 150101131234"
+      maxlength="12">
+
+
+  <button
+      id="btnCari"
+      onclick="cariDelima()">
+
+      Semak Akaun
+
+  </button>
+
+
+  <div id="loading" class="loading hidden">
+
+    <div class="spinner"></div>
+
+    <p>Mencari akaun...</p>
+
+  </div>
+
+
+  <div id="message"></div>
+
+
+  <div id="result" class="result hidden">
+
+    <div class="success">
+      ✓ AKAUN DIJUMPAI
+    </div>
+
+
+    <div class="field">
+
+      <span>Nama Murid</span>
+
+      <strong id="nama"></strong>
+
+    </div>
+
+
+    <div class="field">
+
+      <span>Kelas</span>
+
+      <strong id="kelas"></strong>
+
+    </div>
+
+
+    <div class="field">
+
+      <span>ID DELIMa</span>
+
+      <div class="copy-row">
+
+        <strong id="delima"></strong>
+
+        <button
+            class="copy"
+            onclick="copyText('delima')">
+
+            Salin
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <span>Kata Laluan</span>
+
+      <div class="password-row">
+
+        <strong id="password">
+          ••••••••
+        </strong>
+
+        <button
+            class="small"
+            onclick="togglePassword()">
+
+            👁 Lihat
+
+        </button>
+
+        <button
+            class="small"
+            onclick="copyPassword()">
+
+            Salin
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <a
+      class="login-button"
+      href="https://delima.moe-dl.edu.my/"
+      target="_blank"
+      rel="noopener noreferrer">
+
+      Log Masuk DELIMa
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<section class="quick">
+
+  <h3>Panduan & Bantuan</h3>
+
+
+  <div class="quick-grid">
+
+    <button onclick="showTutorial()">
+
+      <span>📚</span>
+
+      <strong>Tutorial</strong>
+
+      <small>
+        Panduan menggunakan DELIMa
+      </small>
+
+    </button>
+
+
+    <button onclick="showHelp()">
+
+      <span>🆘</span>
+
+      <strong>Bantuan ICT</strong>
+
+      <small>
+        Masalah akaun DELIMa
+      </small>
+
+    </button>
+
+
+  </div>
+
+</section>
+
+
+<section id="tutorial" class="info-section hidden">
+
+<h3>📚 Tutorial DELIMa</h3>
+
+<div class="tutorial-item">
+
+<h4>1. Log Masuk DELIMa</h4>
+
+<p>
+Gunakan ID DELIMa yang diberikan oleh pihak sekolah.
+</p>
+
+</div>
+
+
+<div class="tutorial-item">
+
+<h4>2. Google Classroom</h4>
+
+<p>
+Gunakan akaun DELIMa untuk mengakses kelas
+yang diberikan oleh guru.
+</p>
+
+</div>
+
+
+<div class="tutorial-item">
+
+<h4>3. Google Drive</h4>
+
+<p>
+Simpan tugasan dan dokumen menggunakan
+Google Drive akaun DELIMa.
+</p>
+
+</div>
+
+</section>
+
+
+<section id="help" class="info-section hidden">
+
+<h3>🆘 Bantuan ICT</h3>
+
+<p>
+Jika ID DELIMa tidak dijumpai atau terdapat
+masalah untuk log masuk, sila hubungi
+penyelaras ICT sekolah.
+</p>
+
+<div class="contact">
+
+<strong>
+Penyelaras ICT
+</strong>
+
+<p>
+SK Agama (MIS) Miri
+</p>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+
+<p>
+Portal DELIMa
+</p>
+
+<strong>
+SK Agama (MIS) Miri
+</strong>
+
+<p class="copyright">
+© 2026
+</p>
+
+</footer>
+
+
+<script src="app.js"></script>
+
+<script>
+
+if ("serviceWorker" in navigator) {
+
+window.addEventListener("load", function() {
+
+navigator.serviceWorker.register("service-worker.js");
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
