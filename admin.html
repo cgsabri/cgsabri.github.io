@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#123b72">
+
+  <title>Admin | Portal Pengurusan DELIMa</title>
+
+  <link rel="stylesheet" href="admin.css">
+  <link rel="icon" href="assets/icon-192.png">
+</head>
+
+<body>
+
+<!-- =========================
+     LOGIN
+========================= -->
+
+<section id="loginPage" class="login-page">
+
+  <div class="login-card">
+
+    <img
+      src="assets/logo.png"
+      class="login-logo"
+      alt="Logo Sekolah">
+
+    <h1>Admin DELIMa</h1>
+
+    <p>
+      Portal Pengurusan DELIMa<br>
+      SK Agama (MIS) Miri
+    </p>
+
+    <label for="username">
+      Username
+    </label>
+
+    <input
+      id="username"
+      type="text"
+      autocomplete="username"
+      placeholder="Username">
+
+    <label for="adminPassword">
+      Kata Laluan
+    </label>
+
+    <div class="password-box">
+
+      <input
+        id="adminPassword"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Kata laluan">
+
+      <button
+        type="button"
+        onclick="toggleAdminPassword()">
+        👁
+      </button>
+
+    </div>
+
+    <button
+      id="loginBtn"
+      class="primary-btn"
+      onclick="adminLogin()">
+
+      Log Masuk
+
+    </button>
+
+    <div id="loginMessage"></div>
+
+    <a
+      href="./"
+      class="back-link">
+
+      ← Kembali ke Portal DELIMa
+
+    </a>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     ADMIN APP
+========================= -->
+
+<section
+  id="dashboardPage"
+  class="dashboard hidden">
+
+
+  <!-- HEADER -->
+
+  <header class="admin-header">
+
+    <div class="admin-brand">
+
+      <img
+        src="assets/logo.png"
+        alt="Logo Sekolah">
+
+      <div>
+        <strong>Admin DELIMa</strong>
+        <span>SK Agama (MIS) Miri</span>
+      </div>
+
+    </div>
+
+
+    <button
+      class="logout-btn"
+      onclick="logoutAdmin()">
+
+      Log Keluar
+
+    </button>
+
+  </header>
+
+
+  <main class="admin-main">
+
+
+    <!-- WELCOME -->
+
+    <section class="welcome">
+
+      <span class="badge">
+        ADMIN DASHBOARD
+      </span>
+
+      <h1>
+        Pengurusan DELIMa
+      </h1>
+
+      <p>
+        Urus akaun murid, tutorial dan
+        maklumat bantuan ICT.
+      </p>
+
+    </section>
+
+
+    <!-- NAVIGATION -->
+
+    <nav class="admin-tabs">
+
+      <button
+        id="tabStudents"
+        class="tab active"
+        onclick="showAdminSection('students')">
+
+        <span>👥</span>
+        Murid
+
+      </button>
+
+
+      <button
+        id="tabTutorial"
+        class="tab"
+        onclick="showAdminSection('tutorial')">
+
+        <span>📚</span>
+        Tutorial
+
+      </button>
+
+
+      <button
+        id="tabHelp"
+        class="tab"
+        onclick="showAdminSection('help')">
+
+        <span>🆘</span>
+        Bantuan ICT
+
+      </button>
+
+    </nav>
+
+
+    <!-- =================================
+         STUDENTS
+    ================================= -->
+
+    <section
+      id="studentsSection"
+      class="admin-section">
+
+
+      <!-- STATS -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <span>👥</span>
+
+          <div>
+            <small>Jumlah Murid</small>
+
+            <strong id="totalStudents">
+              -
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span>🏫</span>
+
+          <div>
+            <small>Jumlah Kelas</small>
+
+            <strong id="totalClasses">
+              -
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span>📧</span>
+
+          <div>
+            <small>Akaun DELIMa</small>
+
+            <strong id="totalAccounts">
+              -
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+          <span>🔑</span>
+
+          <div>
+            <small>PIN Belum Ada</small>
+
+            <strong id="missingPin">
+              -
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STUDENT PANEL -->
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div>
+            <h2>Senarai Murid</h2>
+
+            <p>
+              Cari akaun DELIMa berdasarkan
+              nama, No. KP atau ID DELIMa.
+            </p>
+          </div>
+
+          <button
+            class="secondary-btn"
+            onclick="loadDashboard()">
+
+            ↻ Refresh
+
+          </button>
+
+        </div>
+
+
+        <div class="search-tools">
+
+          <input
+            id="studentSearch"
+            type="search"
+            placeholder="Cari murid...">
+
+          <select id="classFilter">
+
+            <option value="">
+              Semua Kelas
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div
+          id="loadingStudents"
+          class="loading hidden">
+
+          Memuatkan data murid...
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Nama</th>
+                <th>No. KP</th>
+                <th>Kelas</th>
+                <th>ID DELIMa</th>
+                <th>PIN</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="studentTable"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================
+         TUTORIAL
+    ================================= -->
+
+    <section
+      id="tutorialSection"
+      class="admin-section hidden">
+
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <h2>
+              📚 Pengurusan Tutorial
+            </h2>
+
+            <p>
+              Tambah dan kemas kini panduan
+              penggunaan DELIMa.
+            </p>
+
+          </div>
+
+
+          <button
+            class="primary-small"
+            onclick="openTutorialForm()">
+
+            + Tambah Tutorial
+
+          </button>
+
+        </div>
+
+
+        <div
+          id="tutorialLoading"
+          class="loading hidden">
+
+          Memuatkan tutorial...
+
+        </div>
+
+
+        <div id="tutorialList"
+             class="tutorial-list">
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================
+         HELP
+    ================================= -->
+
+    <section
+      id="helpSection"
+      class="admin-section hidden">
+
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <h2>
+              🆘 Bantuan ICT
+            </h2>
+
+            <p>
+              Maklumat ini akan dipaparkan
+              pada portal pengguna.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="helpMessage"
+          class="form-message">
+
+        </div>
+
+
+        <div class="admin-form">
+
+          <label>
+            Tajuk
+          </label>
+
+          <input
+            id="helpTitle"
+            type="text"
+            placeholder="Bantuan ICT">
+
+
+          <label>
+            Penerangan
+          </label>
+
+          <textarea
+            id="helpDescription"
+            rows="5"
+            placeholder="Masukkan penerangan bantuan...">
+          </textarea>
+
+
+          <label>
+            Pegawai / Penyelaras
+          </label>
+
+          <input
+            id="helpOfficer"
+            type="text"
+            placeholder="Contoh: Penyelaras ICT">
+
+
+          <label>
+            No. WhatsApp
+          </label>
+
+          <input
+            id="helpWhatsapp"
+            type="tel"
+            inputmode="numeric"
+            placeholder="Contoh: 60123456789">
+
+
+          <label>
+            E-mel
+          </label>
+
+          <input
+            id="helpEmail"
+            type="email"
+            placeholder="contoh@moe-dl.edu.my">
+
+
+          <label>
+            Waktu Bantuan
+          </label>
+
+          <input
+            id="helpTime"
+            type="text"
+            placeholder="Isnin - Jumaat, 8.00 pagi - 4.00 petang">
+
+
+          <button
+            id="saveHelpBtn"
+            class="primary-btn form-save"
+            onclick="saveHelp()">
+
+            Simpan Maklumat Bantuan
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</section>
+
+
+<!-- =========================
+     TUTORIAL MODAL
+========================= -->
+
+<div
+  id="tutorialModal"
+  class="modal hidden">
+
+  <div class="modal-card">
+
+    <div class="modal-header">
+
+      <div>
+        <h2 id="tutorialFormTitle">
+          Tambah Tutorial
+        </h2>
+
+        <p>
+          Maklumat tutorial Portal DELIMa
+        </p>
+      </div>
+
+
+      <button
+        class="modal-close"
+        onclick="closeTutorialForm()">
+
+        ✕
+
+      </button>
+
+    </div>
+
+
+    <input
+      type="hidden"
+      id="tutorialId">
+
+
+    <label>
+      Tajuk Tutorial
+    </label>
+
+    <input
+      id="tutorialTitle"
+      type="text"
+      placeholder="Contoh: Cara Log Masuk DELIMa">
+
+
+    <label>
+      Penerangan
+    </label>
+
+    <textarea
+      id="tutorialDescription"
+      rows="5"
+      placeholder="Masukkan penerangan tutorial...">
+    </textarea>
+
+
+    <label>
+      Link Tutorial / Video
+    </label>
+
+    <input
+      id="tutorialLink"
+      type="url"
+      placeholder="https://...">
+
+
+    <div class="two-columns">
+
+      <div>
+
+        <label>
+          Status
+        </label>
+
+        <select id="tutorialStatus">
+
+          <option value="AKTIF">
+            AKTIF
+          </option>
+
+          <option value="TIDAK AKTIF">
+            TIDAK AKTIF
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div>
+
+        <label>
+          Susunan
+        </label>
+
+        <input
+          id="tutorialOrder"
+          type="number"
+          min="1"
+          value="1">
+
+      </div>
+
+    </div>
+
+
+    <div id="tutorialFormMessage"></div>
+
+
+    <div class="modal-actions">
+
+      <button
+        class="secondary-btn"
+        onclick="closeTutorialForm()">
+
+        Batal
+
+      </button>
+
+
+      <button
+        id="saveTutorialBtn"
+        class="primary-small"
+        onclick="saveTutorial()">
+
+        Simpan Tutorial
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="admin.js"></script>
+
+</body>
+</html>
