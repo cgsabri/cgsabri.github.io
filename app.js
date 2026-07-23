@@ -1,5 +1,5 @@
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxE5cLmLhvnOwVnMH14ApD3bGMH3So1NYhwyWqU5OF9uLg7KEbyDZyhpcmny0h-rqXP/exec";
+"https://script.google.com/macros/s/AKfycbzWvfXVDh6y2ttNc3ySkVcymqEfgmsI7K-wwGY4ve_m_y78HfVIi55k7kyzllgGVnB4/exec";
 
 let currentPassword = "";
 let passwordVisible = false;
