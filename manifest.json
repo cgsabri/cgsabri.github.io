@@ -1,7 +1,9 @@
 {
-  "name": "Portal DELIMa SK Agama Miri",
+  "name": "Portal Pengurusan DELIMa",
   "short_name": "DELIMa",
+  "description": "Portal Pengurusan DELIMa SK Agama (MIS) Miri",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f4f7fb",
   "theme_color": "#123b72",
